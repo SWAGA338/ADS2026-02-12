@@ -16,6 +16,7 @@ package by.it.group510901.pshanichny.lesson02;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class C_GreedyKnapsack {
     public static void main(String[] args) throws FileNotFoundException {
@@ -48,6 +49,27 @@ public class C_GreedyKnapsack {
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
         //ваше решение.
+
+        Arrays.sort(items, (a, b) ->
+                Double.compare((double) b.cost / b.weight, (double) a.cost / a.weight)
+        );
+
+        int remainingWeight = W;
+
+        for (Item item : items) {
+            if (remainingWeight == 0) break;
+
+            if (item.weight <= remainingWeight) {
+                // предмет влезает целиком
+                result += item.cost;
+                remainingWeight -= item.weight;
+            } else {
+                // берём только часть предмета
+                double ratio = (double) item.cost / item.weight;
+                result += ratio * remainingWeight;
+                remainingWeight = 0;
+            }
+        }
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n", result);
         return result;
